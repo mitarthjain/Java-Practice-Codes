@@ -1,0 +1,1078 @@
+
+0/1 knapsack problem
+
+class Knapsack 
+{ 
+  
+    // A utility function that returns maximum of two integers 
+    static int max(int a, int b) { return (a > b)? a : b; } 
+       
+   // Returns the maximum value that can be put in a knapsack of capacity W 
+    static int knapSack(int W, int wt[], int val[], int n) 
+    { 
+         int i, w; 
+     int K[][] = new int[n+1][W+1]; 
+       
+     // Build table K[][] in bottom up manner 
+     for (i = 0; i <= n; i++) 
+     { 
+         for (w = 0; w <= W; w++) 
+         { 
+             if (i==0 || w==0) 
+                  K[i][w] = 0; 
+             else if (wt[i-1] <= w) 
+                   K[i][w] = max(val[i-1] + K[i-1][w-wt[i-1]],  K[i-1][w]); 
+             else
+                   K[i][w] = K[i-1][w]; 
+         } 
+      } 
+       
+      return K[n][W]; 
+    } 
+**********************************************************************************************************************************
+
+Count ways to reach the n’th stair
+
+class stairs 
+{ 
+	// A simple recursive program to find n'th fibonacci number 
+	static int fib(int n) 
+	{ 
+	if (n <= 1) 
+		return n; 
+	return fib(n-1) + fib(n-2); 
+	} 
+	
+	// Returns number of ways to reach s'th stair 
+	static int countWays(int s) 
+	{ 
+		return fib(s + 1); 
+	} 
+
+
+	/* Driver program to test above function */
+	public static void main (String args[]) 
+	{ 
+		int s = 4; 
+			System.out.println("Number of ways = "+ countWays(s)); 
+	} 
+}
+
+
+
+************************************************************************************************************************************************
+to count number of ways if the person can climb up to m stairs for a given value m
+
+class stairs 
+{ 
+	// A recursive function used by countWays 
+	static int countWaysUtil(int n, int m) 
+	{ 
+		if (n <= 1) 
+			return n; 
+		int res = 0; 
+		for (int i = 1; i<=m && i<=n; i++) 
+			res += countWaysUtil(n-i, m); 
+		return res; 
+	} 
+
+	// Returns number of ways to reach s'th stair 
+	static int countWays(int s, int m) 
+	{ 
+		return countWaysUtil(s+1, m); 
+	} 
+
+
+	/* Driver program to test above function */
+	public static void main (String args[]) 
+	{ 
+		int s = 4,m = 2; 
+			System.out.println("Number of ways = "+ countWays(s,m)); 
+	} 
+}
+
+*************************************************************************************************************************************************
+
+
+find all possible combinations of words formed from mobile keypad
+
+
+import java.util.Arrays;
+import java.util.List;
+
+class FindCombinations
+{
+	// Top-down recursive function to find all possible combinations
+	// of words formed from mobile keypad
+	public static void findCombinations(List<List<Character>> keypad,
+										int[] input, String res, int index)
+	{
+		// if we have processed every digit of key, print result
+		if (index == -1)
+		{
+			System.out.print(res + " ");
+			return;
+		}
+
+		// stores current digit
+		int digit = input[index];
+
+		// size of the list corresponding to current digit
+		int len = keypad.get(digit).size();
+
+		// one by one replace the digit with each character in the
+		// corresponding list and recur for next digit
+		for (int i = 0; i < len; i++) {
+			findCombinations(keypad, input, keypad.get(digit).get(i) + res,
+							index - 1);
+		}
+	}
+
+	public static void main(String[] args)
+	{
+		List<List<Character>> keypad = Arrays.asList(
+				// 0 and 1 digit don't have any characters associated
+				Arrays.asList(),
+				Arrays.asList(),
+				Arrays.asList( 'A', 'B', 'C' ),
+				Arrays.asList( 'D', 'E', 'F' ),
+				Arrays.asList( 'G', 'H', 'I' ),
+				Arrays.asList( 'J', 'K', 'L' ),
+				Arrays.asList( 'M', 'N', 'O' ),
+				Arrays.asList( 'P', 'Q', 'R', 'S'),
+				Arrays.asList( 'T', 'U', 'V' ),
+				Arrays.asList( 'W', 'X', 'Y', 'Z')
+		);
+
+		// input number in the form of an array
+		// (number can't start from 0 or 1)
+		int[] input = { 2, 3, 4 };
+
+		// find all combinations
+		findCombinations(keypad, input, "",  input.length - 1);
+	}
+}
+
+******************************************************************************************************************************************************************
+Find minimum number of coins that make a given value
+
+// A Dynamic Programming based Java 
+// program to find minimum of coins 
+// to make a given change V 
+import java.io.*; 
+
+class GFG 
+{ 
+	// m is size of coins array 
+	// (number of different coins) 
+	static int minCoins(int coins[], int m, int V) 
+	{ 
+		// table[i] will be storing 
+		// the minimum number of coins 
+		// required for i value. So 
+		// table[V] will have result 
+		int table[] = new int[V + 1]; 
+
+		// Base case (If given value V is 0) 
+		table[0] = 0; 
+
+		// Initialize all table values as Infinite 
+		for (int i = 1; i <= V; i++) 
+		table[i] = Integer.MAX_VALUE; 
+
+		// Compute minimum coins required for all 
+		// values from 1 to V 
+		for (int i = 1; i <= V; i++) 
+		{ 
+			// Go through all coins smaller than i 
+			for (int j = 0; j < m; j++) 
+			if (coins[j] <= i) 
+			{ 
+				int sub_res = table[i - coins[j]]; 
+				if (sub_res != Integer.MAX_VALUE 
+					&& sub_res + 1 < table[i]) 
+					table[i] = sub_res + 1; 
+						
+				
+			} 
+			
+		} 
+		return table[V]; 
+		
+	} 
+
+	// Driver program 
+	public static void main (String[] args) 
+	{ 
+		int coins[] = {9, 6, 5, 1}; 
+		int m = coins.length; 
+		int V = 11; 
+		System.out.println ( "Minimum coins required is "
+							+ minCoins(coins, m, V)); 
+	} 
+} 
+
+//This Code is contributed by vt_m. 
+*****************************************************************************************************************************************************
+
+// Java Program to implement reverse and add function 
+public class ReverseAdd 
+{ 
+	/* Iterative function to reverse digits of num*/
+	long reversDigits(long num) 
+	{ 
+		long rev_num = 0; 
+		while (num > 0) 
+		{ 
+			rev_num = rev_num*10 + num%10; 
+			num = num/10; 
+		} 
+		return rev_num; 
+	} 
+
+	/* Function to check whether he number is 
+		palindrome or not */
+	boolean isPalindrome(long num) 
+	{ 
+		return (reversDigits(num) == num); 
+	} 
+
+	/* Reverse and Add Function */
+	void ReverseandAdd(long num) 
+	{ 
+		long rev_num = 0; 
+		while (num <= 4294967295l) 
+		{ 
+			// Reversing the digits of the number 
+			rev_num = reversDigits(num); 
+
+			// Adding the reversed number with the original 
+			num = num + rev_num; 
+
+			// Checking whether the number is palindrome or not 
+			if(isPalindrome(num)) 
+			{ 
+				System.out.println(num); 
+				break; 
+			} 
+			else if (num > 4294967295l) 
+			{ 
+				System.out.println("No palindrome exist"); 
+			} 
+		} 
+	} 
+	
+	// Main method 
+	public static void main(String[] args) 
+	{ 
+		ReverseAdd ob = new ReverseAdd(); 
+		ob.ReverseandAdd(195l); 
+		ob.ReverseandAdd(265l); 
+		
+	} 
+} 
+*************************************************************************************************************************************************************
+
+Josephus problem | Set 1 (A O(n) Solution)
+
+
+// Java code for Josephus Problem 
+import java.io.*; 
+
+class GFG { 
+
+static int josephus(int n, int k) 
+{ 
+if (n == 1) 
+	return 1; 
+else
+	
+	return (josephus(n - 1, k) + k-1) % n + 1; 
+} 
+
+// Driver Program to test above function 
+public static void main(String[] args) 
+{ 
+int n = 14; 
+int k = 2; 
+System.out.println("The chosen place is " + josephus(n, k)); 
+} 
+} 
+
+// This code is contributed by Prerna Saini 
+
+**************************************************************************************************************************************************************
+
+Find next greater number with same set of digits
+
+// Java program to find next greater 
+// number with same set of digits. 
+import java.util.Arrays; 
+
+public class nextGreater 
+{ 
+	// Utility function to swap two digit 
+	static void swap(char ar[], int i, int j) 
+	{ 
+		char temp = ar[i]; 
+		ar[i] = ar[j]; 
+		ar[j] = temp; 
+	} 
+
+	// Given a number as a char array number[], 
+	// this function finds the next greater number. 
+	// It modifies the same array to store the result 
+	static void findNext(char ar[], int n) 
+	{ 
+		int i; 
+		
+		// I) Start from the right most digit 
+		// and find the first digit that is smaller 
+		// than the digit next to it. 
+		for (i = n - 1; i > 0; i--) 
+		{ 
+			if (ar[i] > ar[i - 1]) { 
+				break; 
+			} 
+		} 
+		
+		// If no such digit is found, then all 
+		// digits are in descending order means 
+		// there cannot be a greater number with 
+		// same set of digits 
+		if (i == 0) 
+		{ 
+			System.out.println("Not possible"); 
+		} 
+		else
+		{ 
+			int x = ar[i - 1], min = i; 
+			
+			// II) Find the smallest digit on right 
+			// side of (i-1)'th digit that is greater 
+			// than number[i-1] 
+			for (int j = i + 1; j < n; j++) 
+			{ 
+				if (ar[j] > x && ar[j] < ar[min]) 
+				{ 
+					min = j; 
+				} 
+			} 
+
+			// III) Swap the above found smallest 
+			// digit with number[i-1] 
+			swap(ar, i - 1, min); 
+
+			// IV) Sort the digits after (i-1) 
+			// in ascending order 
+			Arrays.sort(ar, i, n); 
+			System.out.print("Next number with same" + 
+									" set of digits is "); 
+			for (i = 0; i < n; i++) 
+				System.out.print(ar[i]); 
+		} 
+	} 
+
+	public static void main(String[] args) 
+	{ 
+		char digits[] = { '5','3','4','9','7','6' }; 
+		int n = digits.length; 
+		findNext(digits, n); 
+	} 
+} 
+
+
+
+**************************************************************************************************************************************************************
+Sum of all the numbers that are formed from root to leaf paths
+
+
+// Java program to find sum of all numbers that are formed from root 
+// to leaf paths 
+
+// A binary tree node 
+class Node 
+{ 
+	int data; 
+	Node left, right; 
+	
+	Node(int item) 
+	{ 
+		data = item; 
+		left = right = null; 
+	} 
+} 
+
+class BinaryTree 
+{ 
+	Node root; 
+
+	// Returns sum of all root to leaf paths. The first parameter is 
+	// root of current subtree, the second parameter is value of the 
+	// number formed by nodes from root to this node 
+	int treePathsSumUtil(Node node, int val) 
+	{ 
+		// Base case 
+		if (node == null) 
+			return 0; 
+
+		// Update val 
+		val = (val * 10 + node.data); 
+
+		// if current node is leaf, return the current value of val 
+		if (node.left == null && node.right == null) 
+			return val; 
+
+		// recur sum of values for left and right subtree 
+		return treePathsSumUtil(node.left, val) 
+				+ treePathsSumUtil(node.right, val); 
+	} 
+
+	// A wrapper function over treePathsSumUtil() 
+	int treePathsSum(Node node) 
+	{ 
+		// Pass the initial value as 0 as there is nothing above root 
+		return treePathsSumUtil(node, 0); 
+	} 
+
+	// Driver program to test above functions 
+	public static void main(String args[]) 
+	{ 
+		BinaryTree tree = new BinaryTree(); 
+		tree.root = new Node(6); 
+		tree.root.left = new Node(3); 
+		tree.root.right = new Node(5); 
+		tree.root.right.right = new Node(4); 
+		tree.root.left.left = new Node(2); 
+		tree.root.left.right = new Node(5); 
+		tree.root.left.right.right = new Node(4); 
+		tree.root.left.right.left = new Node(7); 
+		
+		System.out.print("Sum of all paths is " + 
+								tree.treePathsSum(tree.root)); 
+	}	 
+} 
+
+// This code has been contributed by Mayank Jaiswal 
+**************************************************************************************************************************
+
+// Program to find best buying and selling days 
+import java.util.ArrayList; 
+
+// Solution structure 
+class Interval { 
+	int buy, sell; 
+} 
+
+class StockBuySell { 
+	// This function finds the buy sell schedule for maximum profit 
+	void stockBuySell(int price[], int n) 
+	{ 
+		// Prices must be given for at least two days 
+		if (n == 1) 
+			return; 
+
+		int count = 0; 
+
+		// solution array 
+		ArrayList<Interval> sol = new ArrayList<Interval>(); 
+
+		// Traverse through given price array 
+		int i = 0; 
+		while (i < n - 1) { 
+			// Find Local Minima. Note that the limit is (n-2) as we are 
+			// comparing present element to the next element. 
+			while ((i < n - 1) && (price[i + 1] <= price[i])) 
+				i++; 
+
+			// If we reached the end, break as no further solution possible 
+			if (i == n - 1) 
+				break; 
+
+			Interval e = new Interval(); 
+			e.buy = i++; 
+			// Store the index of minima 
+
+			// Find Local Maxima. Note that the limit is (n-1) as we are 
+			// comparing to previous element 
+			while ((i < n) && (price[i] >= price[i - 1])) 
+				i++; 
+
+			// Store the index of maxima 
+			e.sell = i - 1; 
+			sol.add(e); 
+
+			// Increment number of buy/sell 
+			count++; 
+		} 
+
+		// print solution 
+		if (count == 0) 
+			System.out.println("There is no day when buying the stock "
+							+ "will make profit"); 
+		else
+			for (int j = 0; j < count; j++) 
+				System.out.println("Buy on day: " + sol.get(j).buy 
+								+ "	 "
+								+ "Sell on day : " + sol.get(j).sell); 
+
+		return; 
+	} 
+
+	public static void main(String args[]) 
+	{ 
+		StockBuySell stock = new StockBuySell(); 
+
+		// stock prices on consecutive days 
+		int price[] = { 100, 180, 260, 310, 40, 535, 695 }; 
+		int n = price.length; 
+
+		// fucntion call 
+		stock.stockBuySell(price, n); 
+	} 
+} 
+
+// This code has been contributed by Mayank Jaiswal 
+
+*****************************************************************************************************************************************************************************
+
+// Java program to print left view of binary tree 
+
+/* Class containing left and right child of current 
+node and key value*/
+class Node { 
+	int data; 
+	Node left, right; 
+
+	public Node(int item) 
+	{ 
+		data = item; 
+		left = right = null; 
+	} 
+} 
+
+/* Class to print the left view */
+class BinaryTree { 
+	Node root; 
+	static int max_level = 0; 
+
+	// recursive function to print left view 
+	void leftViewUtil(Node node, int level) 
+	{ 
+		// Base Case 
+		if (node == null) 
+			return; 
+
+		// If this is the first node of its level 
+		if (max_level < level) { 
+			System.out.print(" " + node.data); 
+			max_level = level; 
+		} 
+
+		// Recur for left and right subtrees 
+		leftViewUtil(node.left, level + 1); 
+		leftViewUtil(node.right, level + 1); 
+	} 
+
+	// A wrapper over leftViewUtil() 
+	void leftView() 
+	{ 
+		leftViewUtil(root, 1); 
+	} 
+
+	/* testing for example nodes */
+	public static void main(String args[]) 
+	{ 
+		/* creating a binary tree and entering the nodes */
+		BinaryTree tree = new BinaryTree(); 
+		tree.root = new Node(12); 
+		tree.root.left = new Node(10); 
+		tree.root.right = new Node(30); 
+		tree.root.right.left = new Node(25); 
+		tree.root.right.right = new Node(40); 
+
+		tree.leftView(); 
+	} 
+} 
+
+****************************************************************************************************************
+// Java program to print right view of binary tree 
+
+// A binary tree node 
+class Node { 
+
+	int data; 
+	Node left, right; 
+
+	Node(int item) { 
+		data = item; 
+		left = right = null; 
+	} 
+} 
+
+// class to access maximum level by reference 
+class Max_level { 
+
+	int max_level; 
+} 
+
+class BinaryTree { 
+
+	Node root; 
+	Max_level max = new Max_level(); 
+
+	// Recursive function to print right view of a binary tree. 
+	void rightViewUtil(Node node, int level, Max_level max_level) { 
+
+		// Base Case 
+		if (node == null) 
+			return; 
+
+		// If this is the last Node of its level 
+		if (max_level.max_level < level) { 
+			System.out.print(node.data + " "); 
+			max_level.max_level = level; 
+		} 
+
+		// Recur for right subtree first, then left subtree 
+		rightViewUtil(node.right, level + 1, max_level); 
+		rightViewUtil(node.left, level + 1, max_level); 
+	} 
+
+	void rightView() 
+	{ 
+		rightView(root); 
+	} 
+
+	// A wrapper over rightViewUtil() 
+	void rightView(Node node) { 
+
+		rightViewUtil(node, 1, max); 
+	} 
+
+	// Driver program to test the above functions 
+	public static void main(String args[]) { 
+		BinaryTree tree = new BinaryTree(); 
+		tree.root = new Node(1); 
+		tree.root.left = new Node(2); 
+		tree.root.right = new Node(3); 
+		tree.root.left.left = new Node(4); 
+		tree.root.left.right = new Node(5); 
+		tree.root.right.left = new Node(6); 
+		tree.root.right.right = new Node(7); 
+		tree.root.right.left.right = new Node(8); 
+		
+		tree.rightView(); 
+
+		} 
+} 
+
+// This code has been contributed by Mayank Jaiswal 
+****************************************************************************************************************************************
+
+
+// Java program to print top 
+// view of binary tree 
+import java.util.*; 
+class solution 
+{ 
+
+// structure of binary tree 
+static class Node { 
+	Node left; 
+	Node right; 
+	int data; 
+}; 
+
+// structure of pair 
+static class Pair { 
+	Node first; 
+	int second; 
+	Pair(Node n,int a) 
+	{ 
+		first=n; 
+		second=a; 
+	} 
+}; 
+
+// function to create a new node 
+static Node newNode(int key) 
+{ 
+	Node node = new Node(); 
+	node.left = node.right = null; 
+	node.data = key; 
+	return node; 
+} 
+
+// function should print the topView of 
+// the binary tree 
+static void topView( Node root) 
+{ 
+	// Base case 
+	if (root == null) { 
+		return; 
+	} 
+
+	// Take a temporary node 
+	Node temp = null; 
+
+	// Queue to do BFS 
+	Queue<Pair > q = new LinkedList<Pair>(); 
+
+	// map to store node at each vartical distance 
+	Map<Integer, Integer> mp = new TreeMap<Integer, Integer>(); 
+
+	q.add(new Pair( root, 0 )); 
+
+	// BFS 
+	while (q.size()>0) { 
+
+		temp = q.peek().first; 
+		int d = q.peek().second; 
+		q.remove(); 
+
+		// If any node is not at that vertical distance 
+		// just insert that node in map and print it 
+		if (mp.get(d) == null) {mp.put(d, temp.data); 
+		} 
+
+		// Continue for left node 
+		if (temp.left!=null) { 
+			q.add(new Pair( temp.left, d - 1 )); 
+		} 
+
+		// Continue for right node 
+		if (temp.right!=null) { 
+			q.add(new Pair( temp.right, d + 1 )); 
+		} 
+	} 
+	for(Integer data:mp.values()){ 
+	System.out.print( data + " "); 
+	} 
+} 
+
+// Driver Program to test above functions 
+public static void main(String args[]) 
+{ 
+	/* Create following Binary Tree 
+		1 
+		/ \ 
+		2 3 
+		\ 
+		4 
+		\ 
+		5 
+			\ 
+			6*/
+	Node root = newNode(1); 
+	root.left = newNode(2); 
+	root.right = newNode(3); 
+	root.left.right = newNode(4); 
+	root.left.right.right = newNode(5); 
+	root.left.right.right.right = newNode(6); 
+	System.out.println( "Following are nodes in top view of Binary Tree\n"); 
+	topView(root); 
+} 
+} 
+//contributed by Arnab Kundu 
+**************************************************************************************************************************
+// Java Program to print Bottom View of Binary Tree 
+import java.util.*; 
+import java.util.Map.Entry; 
+
+// Tree node class 
+class Node 
+{ 
+	int data; //data of the node 
+	int hd; //horizontal distance of the node 
+	Node left, right; //left and right references 
+
+	// Constructor of tree node 
+	public Node(int key) 
+	{ 
+		data = key; 
+		hd = Integer.MAX_VALUE; 
+		left = right = null; 
+	} 
+} 
+
+//Tree class 
+class Tree 
+{ 
+	Node root; //root node of tree 
+
+	// Default constructor 
+	public Tree() {} 
+
+	// Parameterized tree constructor 
+	public Tree(Node node) 
+	{ 
+		root = node; 
+	} 
+
+	// Method that prints the bottom view. 
+	public void bottomView() 
+	{ 
+		if (root == null) 
+			return; 
+
+		// Initialize a variable 'hd' with 0 for the root element. 
+		int hd = 0; 
+
+		// TreeMap which stores key value pair sorted on key value 
+		Map<Integer, Integer> map = new TreeMap<>(); 
+
+		// Queue to store tree nodes in level order traversal 
+		Queue<Node> queue = new LinkedList<Node>(); 
+
+		// Assign initialized horizontal distance value to root 
+		// node and add it to the queue. 
+		root.hd = hd; 
+		queue.add(root); 
+
+		// Loop until the queue is empty (standard level order loop) 
+		while (!queue.isEmpty()) 
+		{ 
+			Node temp = queue.remove(); 
+
+			// Extract the horizontal distance value from the 
+			// dequeued tree node. 
+			hd = temp.hd; 
+
+			// Put the dequeued tree node to TreeMap having key 
+			// as horizontal distance. Every time we find a node 
+			// having same horizontal distance we need to replace 
+			// the data in the map. 
+			map.put(hd, temp.data); 
+
+			// If the dequeued node has a left child add it to the 
+			// queue with a horizontal distance hd-1. 
+			if (temp.left != null) 
+			{ 
+				temp.left.hd = hd-1; 
+				queue.add(temp.left); 
+			} 
+			// If the dequeued node has a left child add it to the 
+			// queue with a horizontal distance hd+1. 
+			if (temp.right != null) 
+			{ 
+				temp.right.hd = hd+1; 
+				queue.add(temp.right); 
+			} 
+		} 
+
+		// Extract the entries of map into a set to traverse 
+		// an iterator over that. 
+		Set<Entry<Integer, Integer>> set = map.entrySet(); 
+
+		// Make an iterator 
+		Iterator<Entry<Integer, Integer>> iterator = set.iterator(); 
+
+		// Traverse the map elements using the iterator. 
+		while (iterator.hasNext()) 
+		{ 
+			Map.Entry<Integer, Integer> me = iterator.next(); 
+			System.out.print(me.getValue()+" "); 
+		} 
+	} 
+} 
+
+// Main driver class 
+public class BottomView 
+{ 
+	public static void main(String[] args) 
+	{ 
+		Node root = new Node(20); 
+		root.left = new Node(8); 
+		root.right = new Node(22); 
+		root.left.left = new Node(5); 
+		root.left.right = new Node(3); 
+		root.right.left = new Node(4); 
+		root.right.right = new Node(25); 
+		root.left.right.left = new Node(10); 
+		root.left.right.right = new Node(14); 
+		Tree tree = new Tree(root); 
+		System.out.println("Bottom view of the given binary tree:"); 
+		tree.bottomView(); 
+	} 
+} 
+*******************************************************************************************************************************
+
+// An efficient Java program to find maximum sum 
+// sub-square matrix 
+
+// Class to store the position of start of 
+// maximum sum in matrix 
+class Position { 
+	int x; 
+	int y; 
+
+	// Constructor 
+	Position(int x, int y) { 
+		this.x = x; 
+		this.y = y; 
+	} 
+
+	// Updates the position if new maximum sum 
+	// is found 
+	void updatePosition(int x, int y) { 
+		this.x = x; 
+		this.y = y; 
+	} 
+
+	// returns the current value of X 
+	int getXPosition() { 
+		return this.x; 
+	} 
+
+	// returns the current value of y 
+	int getYPosition() { 
+		return this.y; 
+	} 
+} 
+
+class Gfg { 
+	// Size of given matrix 
+	static int N; 
+
+	// A O(n^2) function to the maximum sum sub- 
+	// squares of size k x k in a given square 
+	// matrix of size n x n 
+	static void printMaxSumSub(int[][] mat, int k) { 
+
+		// k must be smaller than or equal to n 
+		if (k > N) 
+			return; 
+
+		// 1: PREPROCESSING 
+		// To store sums of all strips of size k x 1 
+		int[][] stripSum = new int[N][N]; 
+
+		// Go column by column 
+		for (int j = 0; j < N; j++) { 
+
+			// Calculate sum of first k x 1 rectangle 
+			// in this column 
+			int sum = 0; 
+			for (int i = 0; i < k; i++) 
+				sum += mat[i][j]; 
+			stripSum[0][j] = sum; 
+
+			// Calculate sum of remaining rectangles 
+			for (int i = 1; i < N - k + 1; i++) { 
+				sum += (mat[i + k - 1][j] - mat[i - 1][j]); 
+				stripSum[i][j] = sum; 
+			} 
+		} 
+
+		// max_sum stores maximum sum and its 
+		// position in matrix 
+		int max_sum = Integer.MIN_VALUE; 
+		Position pos = new Position(-1, -1); 
+
+		// 2: CALCULATE SUM of Sub-Squares using stripSum[][] 
+		for (int i = 0; i < N - k + 1; i++) { 
+
+			// Calculate and print sum of first subsquare 
+			// in this row 
+			int sum = 0; 
+			for (int j = 0; j < k; j++) 
+				sum += stripSum[i][j]; 
+
+			// Update max_sum and position of result 
+			if (sum > max_sum) { 
+				max_sum = sum; 
+				pos.updatePosition(i, 0); 
+			} 
+
+			// Calculate sum of remaining squares in 
+			// current row by removing the leftmost 
+			// strip of previous sub-square and adding 
+			// a new strip 
+			for (int j = 1; j < N - k + 1; j++) { 
+				sum += (stripSum[i][j + k - 1] - stripSum[i][j - 1]); 
+
+				// Update max_sum and position of result 
+				if (sum > max_sum) { 
+					max_sum = sum; 
+					pos.updatePosition(i, j); 
+				} 
+			} 
+		} 
+
+		// Print the result matrix 
+		for (int i = 0; i < k; i++) { 
+			for (int j = 0; j < k; j++) { 
+				System.out.print(mat[i + pos.getXPosition()][j + pos.getYPosition()] + " "); 
+			} 
+			System.out.println(); 
+		} 
+	} 
+
+	// Driver program to test above function 
+	public static void main(String[] args) { 
+		N = 5; 
+		int[][] mat = { { 1, 1, 1, 1, 1 }, 
+				{ 2, 2, 2, 2, 2 }, 
+				{ 3, 8, 6, 7, 3 }, 
+				{ 4, 4, 4, 4, 4 }, 
+			{ 5, 5, 5, 5, 5 } }; 
+	int k = 3; 
+
+		System.out.println("Maximum sum 3 x 3 matrix is"); 
+		printMaxSumSub(mat, k); 
+	} 
+} 
+
+// This code is contributed by Vivek Kumar Singh 
+***********************************************************************************************************************************************
+
+// Java program to find maximum amount of water that can 
+// be trapped within given set of bars. 
+
+class Test 
+{ 
+	static int arr[] = new int[]{0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1}; 
+	
+	// Method for maximum amount of water 
+	static int findWater(int n) 
+	{ 
+		// left[i] contains height of tallest bar to the 
+		// left of i'th bar including itself 
+		int left[] = new int[n]; 
+	
+		// Right [i] contains height of tallest bar to 
+		// the right of ith bar including itself 
+		int right[] = new int[n]; 
+	
+		// Initialize result 
+		int water = 0; 
+	
+		// Fill left array 
+		left[0] = arr[0]; 
+		for (int i = 1; i < n; i++) 
+		left[i] = Math.max(left[i-1], arr[i]); 
+	
+		// Fill right array 
+		right[n-1] = arr[n-1]; 
+		for (int i = n-2; i >= 0; i--) 
+		right[i] = Math.max(right[i+1], arr[i]); 
+	
+		// Calculate the accumulated water element by element 
+		// consider the amount of water on i'th bar, the 
+		// amount of water accumulated on this particular 
+		// bar will be equal to min(left[i], right[i]) - arr[i] . 
+		for (int i = 0; i < n; i++) 
+		water += Math.min(left[i],right[i]) - arr[i]; 
+	
+		return water; 
+	} 
+	
+	// Driver method to test the above function 
+	public static void main(String[] args) 
+	{ 
+		
+		System.out.println("Maximum water that can be accumulated is " + 
+										findWater(arr.length)); 
+	} 
+} 
