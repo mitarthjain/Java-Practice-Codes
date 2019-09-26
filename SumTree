@@ -1,0 +1,21 @@
+class GfG
+{
+	boolean isSumTree(Node node)
+	{
+             // Your code here
+             if(node==null|| node.left==null && node.right==null){
+                 return true;
+             }
+             if(addNode(node.left)+addNode(node.right)==node.data){
+                 return (isSumTree(node.left) && isSumTree(node.right));
+             }
+             else return false;
+             
+	}
+	static int addNode(Node node){
+	    if(node==null)
+        return 0;
+      
+	    return (addNode(node.left)+addNode(node.right)+node.data);
+	}
+}
