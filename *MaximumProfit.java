@@ -1,3 +1,55 @@
+******** Recursive Approach *******
+#include <iostream>
+#include <cstring>
+using namespace std;
+
+int f(int * a, int k, int n, int isongoing, int dp[][10][2]) {
+	if (n == 0) {
+		return 0;
+	}
+	if (dp[n][k][isongoing] > -1) {
+		return dp[n][k][isongoing];
+	}
+	int ans = f(a + 1, k , n - 1, isongoing, dp);
+	
+	if (isongoing) {
+		int option = f(a + 1, k - 1, n - 1, 0, dp) + a[0];
+		ans = max(ans, option);
+	} else {
+		if (k == 0) {
+			ans = 0;
+		} else {
+			int option = f(a + 1, k, n - 1, 1, dp) - a[0];
+			ans = max(ans, option);
+		}
+	}
+	dp[n][k][isongoing] = ans;
+	return ans;
+}
+
+int main() {
+	int q;
+	cin >> q;
+	for (int i = 0; i < q; i++) {
+		int k, n;
+		cin >> k >> n;
+		int a[31];
+		for (int j = 0; j < n; j++) {
+			cin >> a[j];
+		}
+		int dp[31][10][2];
+		for (int j = 0; j < 31; j++) {
+			for (int l = 0; l < 10; l++) {
+				dp[j][l][0] = -1;
+				dp[j][l][1] = -1;
+			}
+		}
+		int ans = f(a, k, n, 0, dp);
+		cout << ans << endl;
+	}
+}
+
+*****************************Iterative Approach ***************************
 import java.util.*;
 import java.lang.*;
 import java.io.*;
