@@ -1,0 +1,53 @@
+Complexity Analysis
+
+Time complexity : O(n^2)O(n 
+2
+ ). Two loops of nn are there.
+
+Space complexity : O(n)O(n). dpdp array of size nn is used.
+class Solution {
+    public int lengthOfLIS(int[] a) {
+        if(a.length==0){
+            return 0;
+            
+        }
+        int[] dp=new int[a.length];
+        dp[0]=1;
+        int max=1;
+        for(int i=1;i<dp.length;i++){
+            int maxval=0;
+            for(int j=0;j<i;j++){
+                if(a[i]>a[j]){
+                    maxval=Math.max(maxval,dp[j]);
+                }
+            }
+            dp[i]=maxval+1;
+            max=Math.max(max,dp[i]);
+            
+        }
+        return max;
+    }
+}
+
+*****************************************
+
+Time complexity : O(nlog n)O(nlogn). Binary search takes \log nlogn time and it is called nn times.
+
+Space complexity : O(n)O(n). dpdp array of size nn is used.
+public class Solution {
+    public int lengthOfLIS(int[] nums) {
+        int[] dp = new int[nums.length];
+        int len = 0;
+        for (int num : nums) {
+            int i = Arrays.binarySearch(dp, 0, len, num);
+            if (i < 0) {
+                i = -(i + 1);
+            }
+            dp[i] = num;
+            if (i == len) {
+                len++;
+            }
+        }
+        return len;
+    }
+}
