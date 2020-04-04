@@ -1,0 +1,28 @@
+class Solution {
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        int pi=0;
+        int pe=preorder.length-1;
+        int ist=0;
+        int ie=inorder.length-1;
+        return buildTreeR(preorder,pi,pe,inorder,ist,ie);
+        
+        
+    }
+    private TreeNode buildTreeR(int[] preorder,int pi,int pe,int[] inorder,int ist,int ie){
+        if(pi>pe || ist>ie){
+            return null;
+        }
+        int val=preorder[pi];
+        TreeNode temp=new TreeNode(val);
+        int k=0;
+        for(int i=0; i<inorder.length; i++){
+            if(val == inorder[i]){
+                k=i;
+                break;
+            }
+        }
+        temp.left = buildTreeR(preorder, pi+1, pe+(k-ist), inorder, ist, k-1);
+        temp.right= buildTreeR(preorder, pi+(k-ist)+1, pe, inorder, k+1 , ie);
+        return temp;
+    }
+}
