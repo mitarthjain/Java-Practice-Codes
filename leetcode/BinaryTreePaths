@@ -1,0 +1,36 @@
+class Solution {
+    public List<String> binaryTreePaths(TreeNode root) {
+        List<String> list= new ArrayList<String>();
+        String str = "";
+        TreeNode node = root;
+        
+        if(root == null) return list;
+        
+        str = str+root.val;
+        
+        if(root.left == null && root.right == null){
+            list.add(str);
+            
+        }else{
+             pathRecursion(root.left,str,list);
+             pathRecursion(root.right,str,list);
+        }
+    
+        return list;
+    }
+    
+    void pathRecursion(TreeNode node, String  str,List<String> list){
+        if(node == null) return ;
+        
+         str = str+"->"+node.val;
+        
+        if(node.left == null && node.right == null){
+            list.add(str);
+            str = "";
+            
+        }else{
+            pathRecursion(node.left,str,list);
+            pathRecursion(node.right,str,list);
+        }
+    }
+}
