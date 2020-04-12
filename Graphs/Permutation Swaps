@@ -1,0 +1,79 @@
+import java.util.Scanner;
+
+public class Main {
+
+	
+	static int[] dad = new int[100005];
+    static int find(int x)
+    {
+
+        if(x == dad[x] )
+        {
+            return dad[x];
+        }
+        return ( dad[x] =find(dad[x]));
+    }
+
+    public static void main(String[] args)
+    {
+
+
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+        while (t-- > 0)
+        {
+
+            int n = sc.nextInt();
+            int m = sc.nextInt();
+            for(int i=0;i<=n;i++) dad[i] =i;
+            int[] p = new int[n + 1];
+            for (int i = 1; i <= n; i++)
+            {
+                int val= sc.nextInt();
+                p[val] = i;
+            }
+
+            int[] q = new int[n + 1];
+            for (int i = 1; i <= n; i++)
+            {
+                int val = sc.nextInt();
+                q[val] = i;
+            }
+
+            while (m-- > 0)
+            {
+
+                int a = sc.nextInt();
+                int b = sc.nextInt();
+                a = find(a);
+                b=  find(b);
+                if(a == b)
+                {
+                    continue;
+                }
+                else
+                {
+                    dad[a] =b;
+                }
+            }
+
+            boolean flag = true;
+
+            for (int i = 1; i <= n; i++)
+            {
+                if(find(p[i]) ==find(q[i]))
+                {
+                    continue;
+                }
+                else
+                {
+                    flag = false;
+                }
+
+
+            }
+            System.out.println(flag == true ? "YES" : "NO");
+
+        }
+    }
+}
