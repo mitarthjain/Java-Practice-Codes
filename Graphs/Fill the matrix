@@ -1,0 +1,313 @@
+A matrix B (consisting of integers) of dimension N × N is said to be good if there exists an array A (consisting of integers) such that B[i][j] = |A[i] - A[j]|, where |x| denotes absolute value of integer x.
+You are given a partially filled matrix B of dimension N × N. Q of the entries of this matrix are filled by either 0 or 1.
+You have to identify whether it is possible to fill the remaining entries of matrix B (the entries can be filled by any integer,
+not necessarily by 0 or 1) 
+such that the resulting fully filled matrix B is good.
+
+
+
+import java.io.OutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.util.Arrays;
+import java.io.BufferedWriter;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.InputMismatchException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.io.Writer;
+import java.io.OutputStreamWriter;
+import java.util.Queue;
+import java.util.LinkedList;
+import java.io.InputStream;
+ 
+/**
+ * Built using CHelper plug-in
+ * Actual solution is at the top
+ */
+public class Main
+{
+    public static void main(String[] args)
+    {
+        InputStream inputStream = System.in;
+        OutputStream outputStream = System.out;
+        InputReader in = new InputReader(inputStream);
+        OutputWriter out = new OutputWriter(outputStream);
+        Task solver = new Task();
+        int testCount = Integer.parseInt(in.next());
+        for (int i = 1; i <= testCount; i++)
+            solver.solve(i, in, out);
+        out.close();
+    }
+ 
+    static class Task
+    {
+        List<Integer>[] graph;
+        HashMap<Pair, Integer> hm;
+ 
+        public void solve(int testNumber, InputReader in, OutputWriter out)
+        {
+            boolean check = true;
+            int n = in.readInt();
+            int m = in.readInt();
+            graph = new List[n];
+            for (int i = 0; i < n; i++)
+            {
+                graph[i] = new ArrayList<Integer>();
+            }
+            hm = new HashMap<Pair, Integer>();
+            for (int i = 0; i < m; i++)
+            {
+                int u = in.readInt() - 1;
+                int v = in.readInt() - 1;
+                int type = in.readInt();
+                graph[u].add(v);
+                graph[v].add(u);
+                if (hm.containsKey(new Pair(u, v)))
+                {
+                    if (hm.get(new Pair(u, v)) != type)
+                    {
+                        check = false;
+                    }
+                }
+                hm.put(new Pair(u, v), type);
+                hm.put(new Pair(v, u), type);
+            }
+            boolean[] visited = new boolean[n];
+            Arrays.fill(visited, false);
+            int[] colors = new int[n];
+            for (int i = 0; i < n; i++)
+            {
+                if (!visited[i])
+                {
+                    Queue<Integer> q = new LinkedList<Integer>();
+                    q.add(i);
+                    colors[i] = 0;
+                    while (!q.isEmpty())
+                    {
+                        int v = q.poll();
+                        visited[v] = true;
+                        for (int c : graph[v])
+                        {
+                            int wt = hm.get(new Pair(v, c));
+                            if (!visited[c])
+                            {
+                                colors[c] = (colors[v] + wt) % 2;
+                                q.add(c);
+                            }
+                        }
+                    }
+                }
+            }
+            //    System.out.println(Arrays.toString(colors));
+            for (Pair p : hm.keySet())
+            {
+                int u = (int) p.u;
+                int v = (int) p.v;
+                int wt = hm.get(p);
+                if (((colors[u] - colors[v] + 2) % 2) != wt)
+                {
+                    check = false;
+                }
+            }
+            if (check)
+            {
+                out.printLine("yes");
+            } else
+            {
+                out.printLine("no");
+            }
+        }
+ 
+        public class Pair implements Comparable<Pair>
+        {
+            final long u;
+            final long v;
+ 
+            public Pair(long u, long v)
+            {
+                this.u = u;
+                this.v = v;
+            }
+ 
+            public int hashCode()
+            {
+                int hu = (int) (u ^ (u >>> 32));
+                int hv = (int) (v ^ (v >>> 32));
+                return 31 * hu + hv;
+            }
+ 
+            public boolean equals(Object o)
+            {
+                Pair other = (Pair) o;
+                return u == other.u && v == other.v;
+            }
+ 
+            public int compareTo(Pair other)
+            {
+                return Long.compare(u, other.u) != 0 ? Long.compare(u, other.u) : Long.compare(v, other.v);
+            }
+ 
+            public String toString()
+            {
+                return "[u=" + u + ", v=" + v + "]";
+            }
+ 
+        }
+ 
+    }
+ 
+    static class InputReader
+    {
+        private InputStream stream;
+        private byte[] buf = new byte[1024];
+        private int curChar;
+        private int numChars;
+        private InputReader.SpaceCharFilter filter;
+ 
+        public InputReader(InputStream stream)
+        {
+            this.stream = stream;
+        }
+ 
+        public int read()
+        {
+            if (numChars == -1)
+            {
+                throw new InputMismatchException();
+            }
+            if (curChar >= numChars)
+            {
+                curChar = 0;
+                try
+                {
+                    numChars = stream.read(buf);
+                } catch (IOException e)
+                {
+                    throw new InputMismatchException();
+                }
+                if (numChars <= 0)
+                {
+                    return -1;
+                }
+            }
+            return buf[curChar++];
+        }
+ 
+        public int readInt()
+        {
+            int c = read();
+            while (isSpaceChar(c))
+            {
+                c = read();
+            }
+            int sgn = 1;
+            if (c == '-')
+            {
+                sgn = -1;
+                c = read();
+            }
+            int res = 0;
+            do
+            {
+                if (c < '0' || c > '9')
+                {
+                    throw new InputMismatchException();
+                }
+                res *= 10;
+                res += c - '0';
+                c = read();
+            } while (!isSpaceChar(c));
+            return res * sgn;
+        }
+ 
+        public String readString()
+        {
+            int c = read();
+            while (isSpaceChar(c))
+            {
+                c = read();
+            }
+            StringBuilder res = new StringBuilder();
+            do
+            {
+                if (Character.isValidCodePoint(c))
+                {
+                    res.appendCodePoint(c);
+                }
+                c = read();
+            } while (!isSpaceChar(c));
+            return res.toString();
+        }
+ 
+        public boolean isSpaceChar(int c)
+        {
+            if (filter != null)
+            {
+                return filter.isSpaceChar(c);
+            }
+            return isWhitespace(c);
+        }
+ 
+        public static boolean isWhitespace(int c)
+        {
+            return c == ' ' || c == '\n' || c == '\r' || c == '\t' || c == -1;
+        }
+ 
+        public String next()
+        {
+            return readString();
+        }
+ 
+        public interface SpaceCharFilter
+        {
+            public boolean isSpaceChar(int ch);
+ 
+        }
+ 
+    }
+ 
+    static class OutputWriter
+    {
+        private final PrintWriter writer;
+ 
+        public OutputWriter(OutputStream outputStream)
+        {
+            writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(outputStream)));
+        }
+ 
+        public OutputWriter(Writer writer)
+        {
+            this.writer = new PrintWriter(writer);
+        }
+ 
+        public void print(Object... objects)
+        {
+            for (int i = 0; i < objects.length; i++)
+            {
+                if (i != 0)
+                {
+                    writer.print(' ');
+                }
+                writer.print(objects[i]);
+            }
+        }
+ 
+        public void printLine(Object... objects)
+        {
+            print(objects);
+            writer.println();
+        }
+ 
+        public void close()
+        {
+            writer.close();
+        }
+ 
+    }
+}
+ 
