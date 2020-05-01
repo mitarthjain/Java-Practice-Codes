@@ -1,0 +1,82 @@
+class Solution {
+  Map<Integer, String> map = new HashMap<Integer, String>() {{
+    put(0, "Zero");
+    put(1, "One");
+    put(2, "Two");
+    put(3, "Three");
+    put(4, "Four");
+    put(5, "Five");
+    put(6, "Six");
+    put(7, "Seven");
+    put(8, "Eight");
+    put(9, "Nine");
+    put(10, "Ten");
+    put(11, "Eleven");
+    put(12, "Twelve");
+    put(13, "Thirteen");
+    put(14, "Fourteen");
+    put(15, "Fifteen");
+    put(16, "Sixteen");
+    put(17, "Seventeen");
+    put(18, "Eighteen");
+    put(19, "Nineteen");
+    put(20, "Twenty");
+    put(30, "Thirty");
+    put(40, "Forty");
+    put(50, "Fifty");
+    put(60, "Sixty");
+    put(70, "Seventy");
+    put(80, "Eighty");
+    put(90, "Ninety");
+  }};
+
+  String getWord(int n) {
+    String word = "";
+    if (n/100 > 0) {
+      int temp = n/100;
+      word += map.get(temp) + " Hundred";
+      n = n%100;
+    }
+
+    if (n > 0) {
+      if (n <= 20) {
+        word += " "+map.get(n);
+      } else {
+        int temp = n-n%10;
+        word += " "+map.get(temp);
+        n = n%10;
+        if (n != 0) {
+          word += " "+map.get(n);
+        }
+      }
+    }
+
+    return word.trim();
+  }
+
+  public String numberToWords(int n) {
+    if (map.containsKey(n)) {
+      return map.get(n);
+    }
+
+    String word = new String();
+    if (n/1000000000 >= 1) {
+      int temp = n/1000000000;
+      word += " "+getWord(temp) + " Billion";
+      n = n%1000000000;
+    }
+    if (n/1000000 >= 1) {
+      int temp = n/1000000;
+      word += " "+getWord(temp) + " Million";
+      n = n%1000000;
+    }
+    if (n/1000 >= 1) {
+      int temp = n/1000;
+      word += " "+getWord(temp) + " Thousand";
+      n = n%1000;
+    }
+    
+    word += " "+getWord(n);
+    return word.trim();
+  }
+}
