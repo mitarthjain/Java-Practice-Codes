@@ -1,0 +1,44 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define Int long long
+#define MAX 1003
+#define INF 1e17
+
+Int edges[MAX][MAX];
+int main(){
+     int n,m,q,u,v,d,i,j,k;
+    cin>>n>>m>>q;
+    for(i=1;i<=n;i++){
+        for(j=1;j<=n;j++){
+            edges[i][j]=INF;
+        }
+    }
+    for(i=0;i<m;i++){
+        cin>>u>>v>>d;;
+        edges[u][v]=d;
+        edges[v][u]=d;
+    }
+    for(k=1;k<=n;k++){
+        for(i=1;i<=n;i++){
+            for(j=1;j<=n;j++){
+                if(edges[i][k]+edges[k][j]<edges[i][j]){
+                    edges[i][j]=edges[i][k]+edges[k][j];
+                }
+            }
+        }
+    }
+    while(q--){
+        cin>>u>>v;
+        if(edges[u][v]==INF){
+            cout<<"-1\n";
+        }
+        else{
+            cout<<edges[u][v]<<endl;
+        }
+    }
+    
+    
+    
+
+	return 0;
+}
