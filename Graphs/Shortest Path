@@ -1,0 +1,43 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+int queue[200005],fron=0,en=0,dist[200005];
+int solve(int n,int m,int s,int t,vector<vector<int> >G){
+    for(int i=1;i<=n;i++)
+		dist[i]=2*n;
+	queue[en++]=s;
+	dist[s]=0;
+	while(fron<en)
+	{
+		int u=queue[fron];
+		fron++;
+		for(int i=0;i<G[u].size();i++)
+		if(dist[G[u][i]]>dist[u]+1)
+		{
+			dist[G[u][i]]=dist[u]+1;
+			queue[en++]=G[u][i];
+		}
+	}
+	return dist[t];
+    
+}
+vector<vector<int> >G;
+int main(){
+	int n,m,s,t;
+	cin>>n>>m;
+	for(int i=0;i<=n;i++)
+	{
+		vector<int>v;
+		G.push_back(v);
+	}
+	for(int i=0;i<m;i++)
+	{
+		int x,y;
+		cin>>x>>y;
+		G[y].push_back(x);
+		G[x].push_back(y);
+	}
+	cin>>s>>t;
+	cout<<solve(n,m,s,t,G)<<endl;
+	return 0;
+}
