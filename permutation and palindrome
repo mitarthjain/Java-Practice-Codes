@@ -1,0 +1,67 @@
+/* package codechef; // don't place package name! */
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+/* Name of the class has to be "Main" only if the class is public. */
+class Codechef
+{
+	public static void main (String[] args) throws java.lang.Exception
+	{
+		// your code goes here
+		Scanner sc = new Scanner(System.in);
+		int t = sc.nextInt();
+		sc.nextLine();
+		for(int i = 0; i<t; i++){
+		    String s = sc.nextLine();
+		    HashMap<Character, List<Integer>> m = new HashMap<>();
+		    for(int j = 0; j<s.length(); j++){
+		        if(m.containsKey(s.charAt(j))){
+		            List<Integer> temp = m.get(s.charAt(j));
+		            temp.add(j+1);
+		            m.put(s.charAt(j), temp);
+		        } else {
+		            List<Integer> temp = new ArrayList<>();
+		            temp.add(j+1);
+		            m.put(s.charAt(j), temp);
+		        }
+		    }
+		    int count_odd = 0;
+		    Set<Character> keys = m.keySet();
+		    for(Character key : keys){
+		        List<Integer> temp = m.get(key);
+		        if(temp.size()%2 != 0){
+		            count_odd++;
+		        }
+		    }
+		    if(count_odd >= 2){
+		        System.out.println("-1");
+		    } else {
+		        int n = s.length();
+		        int arr[] = new int[n];
+		        int si = 0;
+		        int ei = n-1;
+		        for(Character key : keys){
+		            List<Integer> temp = m.get(key);
+		            int j = 0;
+		            if(temp.size() % 2 != 0){
+		                arr[n/2] = temp.get(0);
+		                j++;
+		            }
+		            for(; j<=temp.size()-2; j = j+2){
+		                arr[si] = temp.get(j);
+		                si++;
+		                arr[ei] = temp.get(j+1);
+		                ei--;
+		            }
+		        }
+		        for(int l = 0; l<n; l++){
+		            System.out.print(arr[l] + " ");
+		        }
+		        System.out.println();
+		    }
+		    
+		}
+	}
+}
