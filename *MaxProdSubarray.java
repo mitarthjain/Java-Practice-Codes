@@ -1,3 +1,38 @@
+******************leetcode solution*****************
+class Solution {
+    public int maxProduct(int[] nums) {
+        int min_so_far=nums[0];
+        int max_so_far=nums[0];
+        int curr_max=nums[0];
+        int curr_min=nums[0];
+        int result=nums[0];
+        
+        for(int i=1;i<nums.length;i++){
+            
+            if(nums[i]>0){
+                curr_max = Math.max(nums[i],nums[i] * max_so_far);
+                curr_min = Math.min(nums[i] , nums[i] * min_so_far); 
+            }
+            else{                
+                curr_max = Math.max(nums[i],nums[i] * min_so_far);
+                curr_min = Math.min(nums[i] , nums[i] * max_so_far);
+            }
+            max_so_far = curr_max;
+            min_so_far = curr_min;
+            result = Math.max(result,max_so_far);
+            
+            
+            
+        }
+        return result;
+        
+    
+        
+    }
+}
+
+
+***************************************************************************************
 import java.lang.*;
 import java.io.*;
 class GFG{	
