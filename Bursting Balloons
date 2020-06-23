@@ -1,0 +1,53 @@
+It is festive time of the year. And Vidit and Parikh loves this festive season, as they get to go to Mela.
+Mela brings home their favourite game: "Bursting Balloons". The player has to stand at the leftmost corner of
+the platform. And there are N balloons, lined up from left to right. The aim of the player is to destroy all these balloons. 
+Now, a balloon can only be destroyed if player shoots its head. So, to do the needful, he/ she shoots an arrow from the left to the 
+right side of the platform, from an arbitrary height he/she chooses. The arrow moves from left to right, at a chosen height H until 
+it finds a balloon. The moment when an arrow touches a balloon, the balloon gets destroyed and disappears and the arrow continues its 
+way from left to right at a height decreased by 1. Therefore, if the arrow was moving at height H, after destroying the balloon it 
+travels on height H-1. The player wins this game, if he destroys all the balloons in minimum arrows.
+Vidit challenges Parikh to play this game. You have to tell minimum arrows used by Parikh to win the game.
+
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Scanner;
+
+public class Main {
+
+	public static void main(String[] args) {
+		Scanner scn = new Scanner(System.in);
+		int sizeofarray = scn.nextInt();
+		HashMap<Integer, Integer> map = new HashMap<>();
+		int counter = 0;
+		for (int i = 0; i < sizeofarray; i++) {
+			int value = scn.nextInt();
+			if (map.containsKey(value + 1)) {
+				map.put(value + 1, map.get(value + 1) - 1);
+				if (map.get(value + 1) == 0) {
+					map.remove(value + 1);
+				}
+				if (map.containsKey(value) == true) {
+					map.put(value, map.get(value) + 1);
+				} else {
+					map.put(value, 1);
+				}
+
+			} else {
+				if (map.containsKey(value) == true) {
+					map.put(value, map.get(value) + 1);
+				} else {
+					map.put(value, 1);
+				}
+			}
+		}
+		ArrayList<Integer> al = new ArrayList<>(map.keySet());
+		for (int val : al) {
+			counter += map.get(val);
+		}
+
+		System.out.println(counter);
+		scn.close();
+	}
+
+}
