@@ -1,0 +1,52 @@
+class Solution
+{
+    static Stack<Integer> stack=new Stack<Integer>();
+    public int kosaraju(ArrayList<ArrayList<Integer>> adj, int n)
+    {
+        boolean vis[]=new boolean[n];
+        for(int i=0;i<n;i++)
+          if(!vis[i])
+             dfs(adj,i,vis);
+             
+        adj=reverse(adj,n);
+        Arrays.fill(vis,false);
+        
+        int count=0;
+        while(stack.size()>0)
+        {
+            int fv=stack.pop();
+            if(!vis[fv]){
+            reversedfs(adj,fv,vis);
+            count++;
+            }
+        }
+        return count;
+    }
+    public static void dfs(ArrayList<ArrayList<Integer>> adj,int src,boolean vis[])
+    {
+        vis[src]=true;
+        for(int child : adj.get(src))
+           if(!vis[child])
+             dfs(adj,child,vis);
+        stack.push(src);     
+    }
+    public static void reversedfs(ArrayList<ArrayList<Integer>> adj, int src,boolean vis[])
+    {
+        vis[src]=true;
+        for(int child : adj.get(src))
+          if(!vis[child])
+           dfs(adj,child,vis);
+    }
+    public static ArrayList<ArrayList<Integer>> reverse(ArrayList<ArrayList<Integer>> adj, int n)
+    {
+        ArrayList<ArrayList<Integer>> g=new ArrayList<ArrayList<Integer>>();
+        for(int i=0;i<n;i++)
+        g.add(new ArrayList<Integer>());
+        for(int i=0;i<n;i++)
+        {
+            for(int child : adj.get(i))
+              g.get(child).add(i);
+        }
+        return g;
+    }
+}
