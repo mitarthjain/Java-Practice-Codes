@@ -1,0 +1,39 @@
+class GFG
+{
+    public static Node addPolynomial(Node p1,Node p2)
+    {
+        //Add your code here.
+        Node temp=new Node(0,0);
+        Node p=temp;
+        while(p1!=null && p2!=null){
+            if(p1.pow>p2.pow){
+                Node n=new Node(p1.coeff,p1.pow);
+                p.next=n;
+                p1=p1.next;
+            }
+            else if(p2.pow>p1.pow){
+                Node n=new Node(p2.coeff,p2.pow);
+                p.next=n;
+                p2=p2.next;
+                
+            }
+            else{
+                Node n=new Node(p2.coeff+p1.coeff,p2.pow);
+                p.next=n;
+                p2=p2.next;
+                p1=p1.next;
+            }
+            p=p.next;
+        }
+        if(p1!=null){
+            p.next=p1;
+        }
+        if(p2!=null){
+            p.next=p2;
+        }
+        return temp.next;
+        
+        
+        
+    }
+}
